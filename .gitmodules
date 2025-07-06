@@ -1,0 +1,3 @@
+[submodule "references/fastapi-best-practices"]
+	path = references/fastapi-best-practices
+	url = https://github.com/zhanymkanov/fastapi-best-practices
