@@ -1,5 +1,5 @@
 # Data
-/data/
+# /data/
 
 # Mac OS-specific storage files
 .DS_Store
@@ -140,7 +140,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+# .env
 .venv
 env/
 venv/
