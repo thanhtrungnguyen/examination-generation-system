@@ -1,3 +1,6 @@
 [submodule "references/fastapi-best-practices"]
 	path = references/fastapi-best-practices
 	url = https://github.com/zhanymkanov/fastapi-best-practices
+[submodule "references/next-js-boilerplate"]
+	path = references/next-js-boilerplate
+	url = https://github.com/ixartz/Next-js-Boilerplate
