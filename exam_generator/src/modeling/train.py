@@ -114,7 +114,7 @@ Please answer with one of the options in the bracket. Write reasoning in between
         gradient_accumulation_steps=2,
         optim="paged_adamw_32bit",
         num_train_epochs=1,
-        logging_steps=0.2,
+        logging_steps=1,
         warmup_steps=10,
         logging_strategy="steps",
         learning_rate=2e-4,
@@ -122,7 +122,6 @@ Please answer with one of the options in the bracket. Write reasoning in between
         bf16=False,
         group_by_length=True,
         report_to="tensorboard",
-        logging_dir="../../logs/",
     )
     trainer = SFTTrainer(
         model=model,
