@@ -6,7 +6,13 @@ import typer
 import os
 from dotenv import load_dotenv
 from huggingface_hub import login
-from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, DataCollatorForLanguageModeling, TrainingArguments
+from transformers import (
+    AutoModelForCausalLM,
+    AutoTokenizer,
+    BitsAndBytesConfig,
+    DataCollatorForLanguageModeling,
+    TrainingArguments,
+)
 from datasets import load_dataset
 from peft import LoraConfig, get_peft_model
 from trl import SFTTrainer
@@ -21,8 +27,8 @@ app = typer.Typer()
 @app.command()
 def main(
     # ---- REPLACE DEFAULT PATHS AS APPROPRIATE ----
-    features_path: Path = PROCESSED_DATA_DIR / "features.csv",
-    labels_path: Path = PROCESSED_DATA_DIR / "labels.csv",
+    # features_path: Path = PROCESSED_DATA_DIR / "features.csv",
+    # labels_path: Path = PROCESSED_DATA_DIR / "labels.csv",
     model_path: Path = MODELS_DIR / "DeepSeek-R1-Distill-Qwen-1.5B-Medical-Reasoning",
     # -----------------------------------------
 ):
@@ -48,7 +54,7 @@ def main(
         quantization_config=bnb_config,
         device_map="auto",
         torch_dtype=torch.bfloat16,
-        trust_remote_code=True
+        trust_remote_code=True,
     )
     model.config.use_cache = False
     model.config.pretraining_tp = 1
@@ -61,6 +67,7 @@ Please answer with one of the options in the bracket. Write reasoning in between
 ### Response:
 {}"""
     EOS_TOKEN = tokenizer.eos_token
+
     def formatting_prompts_func(examples):
         inputs = examples["input"]
         outputs = examples["output"]
@@ -82,10 +89,7 @@ Please answer with one of the options in the bracket. Write reasoning in between
         formatting_prompts_func,
         batched=True,
     )
-    data_collator = DataCollatorForLanguageModeling(
-        tokenizer=tokenizer,
-        mlm=False
-    )
+    data_collator = DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)
     peft_config = LoraConfig(
         lora_alpha=16,
         lora_dropout=0.05,
@@ -93,7 +97,13 @@ Please answer with one of the options in the bracket. Write reasoning in between
         bias="none",
         task_type="CAUSAL_LM",
         target_modules=[
-            "q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj",
+            "q_proj",
+            "k_proj",
+            "v_proj",
+            "o_proj",
+            "gate_proj",
+            "up_proj",
+            "down_proj",
         ],
     )
     model = get_peft_model(model, peft_config)
@@ -104,14 +114,15 @@ Please answer with one of the options in the bracket. Write reasoning in between
         gradient_accumulation_steps=2,
         optim="paged_adamw_32bit",
         num_train_epochs=1,
-        logging_steps=1,
+        logging_steps=0.2,
         warmup_steps=10,
         logging_strategy="steps",
         learning_rate=2e-4,
         fp16=False,
         bf16=False,
         group_by_length=True,
-        report_to="tensorboard"
+        report_to="tensorboard",
+        logging_dir="../../logs/",
     )
     trainer = SFTTrainer(
         model=model,
