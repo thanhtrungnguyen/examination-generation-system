@@ -4,7 +4,7 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "src"
-version = "0.0.1"
+version = "0.0.2"
 description = "A short description of the project."
 authors = [
   { name = "EGS Team" },
@@ -16,23 +16,28 @@ classifiers = [
     "License :: OSI Approved :: MIT License"
 ]
 dependencies = [
-    "accelerate>=1.9.0",
-    "bitsandbytes>=0.46.1",
-    "datasets>=4.0.0",
-    "hf-xet>=1.1.5",
-    "ipywidgets>=8.1.7",
+    "accelerate",
+    "bitsandbytes",
+    "datasets",
+    "hf-xet",
+    "ipywidgets",
     "loguru",
     "mkdocs",
-    "peft>=0.16.0",
+    "peft",
     "pip",
     "python-dotenv",
     "ruff",
+    "unsloth",
     "tqdm",
-    "transformers>=4.53.3",
-    "trl>=0.19.1",
+    "transformers",
+    "trl",
     "typer",
+    "notebook>=7.4.4",
+    "matplotlib>=3.10.3",
+    "numpy>=2.3.2",
+    "pandas>=2.3.1",
 ]
-requires-python = "~=3.13.0"
+requires-python = "==3.12.10"
 
 
 [tool.ruff]
